@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# This script is displaying "Best School" 10 times
-n=0
-until (( n == 10 ))
+# Bash script that displays Best School 10 times.
+
+COUNTER=10
+until [ $COUNTER -lt 1 ]
 do
     echo "Best School"
-    (( n++ ))
+        ((COUNTER-=1));
 done
