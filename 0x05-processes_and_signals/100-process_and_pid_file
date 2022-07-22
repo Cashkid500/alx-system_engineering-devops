@@ -1,15 +1,31 @@
 #!/usr/bin/env bash
-# Creates the file /var/run/holbertonscript.pid containing its PID
-# Displays "To infinity and beyond" indefinitely
-# Displays "I hate the kill command" when receiving a SIGTERM signal
-# Displays "Y U no love me?!" when receiving a SIGINT signal
-# Deletes the file /var/run/holbertonscript.pid and terminate itself when receiving a SIGQUIT or SIGTERM signal
+# This script Starts/Stops/Restarts manage_my_process script
 
-echo "$$" > /var/run/holbertonscript.pid
-trap "echo 'I hate the kill command'; rm /var/run/holbertonscript.pid; exit" SIGTERM
-trap "rm /var/run/holbertonscript.pid; exit" SIGQUIT
-trap "echo 'Y U no love me?!'" SIGINT
-while true; do
-      echo "To infinity and beyond"
-      sleep 2
-done
+argv1=$1
+tmpfile="/var/run/my_process.pid"
+
+startLoop_n_createFile()
+{
+    ./manage_my_process &
+    echo "$!" > "$tmpfile"
+}
+killLoop_n_rmFile()
+{
+    #kill "$(cat "$tmpfile")"
+    sudo pkill -f "./manage_my_process"
+    rm "$tmpfile"
+}
+case "$argv1" in
+    start) echo "manage_my_process started"
+	startLoop_n_createFile
+	;;
+    stop) echo "manage_my_process stopped"
+	killLoop_n_rmFile
+	;;
+    restart) echo "manage_my_process restarted"
+	killLoop_n_rmFile
+	startLoop_n_createFile
+	;;
+    *) echo "Usage: manage_my_process {start|stop|restart}"
+	;;
+esac
