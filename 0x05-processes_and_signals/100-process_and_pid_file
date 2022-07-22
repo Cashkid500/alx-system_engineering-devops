@@ -1,13 +1,11 @@
 #!/usr/bin/env bash
-# Bash script that create a file with its own PID
-echo "$$" > /var/run/holbertonscript.pid 
-
-trap "echo 'I hate the kill command'; rm /var/run/holbertonscript.pid; exit" SIGTERM
-trap "echo 'Y U no love me?!'" SIGINT
-trap "rm /var/run/holbertonscript.pid; exit" SIGQUIT 
-
-while ( true )
+# create pub file with its own pid and receive SIG
+sudo bash -c "echo $$ > /var/run/codingschoolscript.pid"
+trap "sudo rm -f /var/run/codingschoolscript.pid; exit" SIGQUIT
+trap "sudo rm -f /var/run/codingschoolscript.pid; echo I hate the kill command; exit" SIGTERM
+trap "echo Y U no love me?!" SIGINT
+while :
 do
-	echo "To infinity and beyond"
-	sleep 2
+    echo "To infinity and beyond"
+    sleep 2
 done
